@@ -32,7 +32,15 @@ const HomePage = () => {
         }
       });
     } catch (err) {
-      setError(err.message || 'An error occurred while searching');
+      // Provide more helpful error messages
+      let errorMessage = err.message || 'An error occurred while searching';
+      
+      // Check if it's a connection error
+      if (err.message.includes('connect') || err.message.includes('ECONNREFUSED') || err.message.includes('404')) {
+        errorMessage = 'Cannot connect to backend server. Please ensure the backend is running on port 3001.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

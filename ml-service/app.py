@@ -5,6 +5,7 @@ Exposes REST API for song identification using TF-IDF and cosine similarity.
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 import pickle
 import re
 import numpy as np
@@ -28,17 +29,6 @@ except LookupError:
 
 # Initialize stopwords
 stop_words = set(stopwords.words('english'))
-
-app = FastAPI(title="Spotify Lyric Search ML Service", version="1.0.0")
-
-# CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # In production, specify exact origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Global variables for model and data
 vectorizer = None
@@ -98,14 +88,33 @@ def load_model():
     print(f"Model loaded successfully. {len(song_data)} songs available.")
 
 
-# Load model on startup
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Load model
     try:
         load_model()
     except Exception as e:
         print(f"Warning: Could not load model: {e}")
         print("Please run train_model.py first to train the model.")
+    yield
+    # Shutdown: Cleanup (if needed)
+    pass
+
+
+app = FastAPI(
+    title="Spotify Lyric Search ML Service",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify exact origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Request/Response models
