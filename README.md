@@ -5,6 +5,7 @@ A complete full-stack web application that identifies songs and artists from lyr
 ## 📋 Table of Contents
 
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
@@ -21,7 +22,18 @@ A complete full-stack web application that identifies songs and artists from lyr
 - **Modern UI**: Beautiful, responsive design with Tailwind CSS
 - **RESTful APIs**: Clean API architecture with proper error handling
 
-## 🛠️ Tech Stack
+## � Screenshots
+
+### Home Page
+![Home Page](image1.png)
+
+### Search Results
+![Searching](image2.png)
+
+### Search History
+![Search Result](image3.png)
+
+## �🛠️ Tech Stack
 
 ### Frontend
 - **React 18** - UI framework
